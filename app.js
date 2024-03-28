@@ -3,6 +3,8 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import "./db.js"
+// import authRouter from "./routes/authRouter.js"
+// + імпорт інших Роутерів
 
 const app = express();
 
@@ -10,7 +12,13 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
-// routes here
+// routers here
+// app.use("/api/auth", authRouter);
+// app.use("/api/users", usersRouter);
+// app.use("/api/water", waterRouter);
+// app.use("/api/calendar", calendarRouter);
+
+
 
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
