@@ -31,16 +31,6 @@ const userSchema = new Schema({
     type: String,
     default: " ",
   },
-  dailyUse: {
-    amount: {
-      type: String,
-      default: " ",
-    },
-    time: {
-      type: Number,
-      default: 0,
-    },
-  },
 });
 userSchema.post("save", handleMongooseError);
 
