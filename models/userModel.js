@@ -27,9 +27,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  waterTrack: {
-    type: String,
-    default: " ",
+  waterRate: {
+    type: Number,
+    default: 0,
   },
 });
 userSchema.post("save", handleMongooseError);
