@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../helpers/handleMongooseError");
+import { Schema, model } from "mongoose";
+import handleMongooseError from "../helpers/handleMongooseError";
 
 const emailRegexp = /^\w+([\.-]?w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
