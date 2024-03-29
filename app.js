@@ -2,9 +2,14 @@ import "dotenv/config.js";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import "./db.js"
+import swaggerUi from "swagger-ui-express";
+import { createRequire } from "node:module";
+// import swaggerDocument from "./swagger.json" assert { type: "json" };
+import "./db.js";
 // import authRouter from "./routes/authRouter.js"
 // + імпорт інших Роутерів
+const require = createRequire(import.meta.url);
+const swaggerDocument = require("./swagger.json");
 
 const app = express();
 
@@ -17,9 +22,7 @@ app.use(express.json());
 // app.use("/api/users", usersRouter);
 // app.use("/api/water", waterRouter);
 // app.use("/api/calendar", calendarRouter);
-
-
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
 });
