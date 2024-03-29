@@ -5,9 +5,10 @@
         "title":"Water track API docs - OpenAPI 3.0",
         "description": "**Функціональні можливості**: Реєстрація та авторизація користувачів,....",
         "consumes":["application/json", "multipart/form-data"],
-        "produces":["application/json"],
-        "servers":[{"url":"http://localhost:3000"}],
-        "tags":[{
+        "produces":["application/json"]
+    },
+    "servers":[{"url":"http://localhost:3000"}],
+    "tags":[{
             "name":"Auth",
             "description":"Authorization endpoints"
         },
@@ -21,9 +22,9 @@
         },
         {
             "name":"Calendar",
-            "description":"Calendat endpoints"
+            "description":"Calendar endpoints"
         }],
-        "paths":{
+    "paths":{
             "/api/auth/register":{
                 "post":{
                     "tags":["Auth"],
@@ -230,4 +231,3 @@
             }
         }
     }
-}
