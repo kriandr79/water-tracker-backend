@@ -5,7 +5,7 @@ const catchAsync = (fn) => (req, res, next) => {
 };
 
 const catchAuth = (fn) => (req, res, next) => {
-	fn(req, res, next).catch(() => next(new HttpError(401, "Not authorized")));
+	fn(req, res, next).catch(() => next(HttpError(401, "Not authorized")));
 };
 
 export { catchAsync, catchAuth };
