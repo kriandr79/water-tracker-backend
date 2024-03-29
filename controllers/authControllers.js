@@ -1,35 +1,66 @@
 import User from "../models/userModel.js";
 
 import HttpError from "../helpers/HttpError.js";
-import { catchAsync } from "../helpers/Wraps.js";
+import ctrlWrapper from "../helpers/ctrlWrapper.js";
+import hashing from "../helpers/hashing.js";
+import JWTHandling from "../helpers/JWTHandling.js";
 
-const registerUser = catchAsync(async (req, res) => {
+const registerUser = ctrlWrapper(async (req, res) => {
 	const { email, password } = req.body;
 
 	const isPresent = await User.findOne({ email });
 	if (isPresent) throw HttpError(409, "Email already registered");
 
-	// const finalPassword = await hashPassword(password);
-	// І передати у створення юзера
+	const finalPassword = await hashing.hashPassword(password);
 
-	const newUser = await createNewUser({
+	const newUser = await User.create({
 		...req.body,
+		password: finalPassword,
 	});
+
+	const verificationToken = JWTHandling.signToken(newUser._id);
+
+	newUser.token = verificationToken;
+	await newUser.save();
 
 	res.status(201).json({
-		user: { email: newUser.email, subscription: newUser.subscription },
-		token: null,
+		user: { email: newUser.email, name: newUser.name },
+		token: verificationToken,
 	});
-
-	// const verificationToken = signToken(newUser._id);
-
-	// newUser.token = verificationToken;
-	// await newUser.save();
-
-	// res.status(201).json({
-	// 	user: { email: newUser.email, subscription: newUser.subscription },
-	// 	token: verificationToken,
-	// });
 });
 
-export default { registerUser };
+const logInUser = ctrlWrapper(async (req, res) => {
+	const { email, password } = req.body;
+
+	const thisUser = await User.findOne({ email });
+	if (!thisUser) throw HttpError(401, "Email or password is wrong");
+
+	const isAuthentic = await hashing.comparePasswords(
+		password,
+		thisUser.password
+	);
+	if (!isAuthentic) throw HttpError(401, "Email or password is wrong");
+
+	const newToken = await JWTHandling.signToken(thisUser.id);
+
+	const updatedUser = await User.findOneAndUpdate(
+		{ _id: thisUser._id },
+		{ token: newToken },
+		{ returnDocument: "after" }
+	);
+
+	res.status(200).json({
+		user: { email: updatedUser.email, name: updatedUser.name },
+		token: updatedUser.token,
+	});
+});
+
+const logOutUser = ctrlWrapper(async (req, res) => {
+	const { _id } = req.user;
+
+	await User.findByIdAndUpdate(_id, { token: "" });
+
+	res.status(204).json();
+});
+
+export default { registerUser, logInUser, logOutUser };

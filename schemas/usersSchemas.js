@@ -30,7 +30,7 @@ export const registerUserSchema = Joi.object({
 		"object.missing":
 			"Body must have your email and your password as properties of a JSON.",
 		"object.unknown":
-			"Body cannot have any properties other than email and password",
+			"Body cannot have any properties other than name, email and password",
 	});
 
 export const logInSchema = Joi.object({
@@ -43,7 +43,7 @@ export const logInSchema = Joi.object({
 		.label("Your email")
 		.required()
 		.messages({
-			"any.required": requiredMissingMsg,
+			"any.required": "Please provide your email and password",
 			"string.email": "Please provide a valid email address",
 		}),
 	password: Joi.string()
@@ -53,7 +53,7 @@ export const logInSchema = Joi.object({
 		.max(30)
 		.required()
 		.messages({
-			"any.required": requiredMissingMsg,
+			"any.required": "Please provide your email and password",
 			"string.alphanum":
 				"Please only use numbers and letters for the password.",
 		}),

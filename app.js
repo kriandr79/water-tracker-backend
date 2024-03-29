@@ -6,7 +6,7 @@ import cors from "cors";
 import { createRequire } from "node:module";
 // import swaggerDocument from "./swagger.json" assert { type: "json" };
 import "./db.js";
-// import authRouter from "./routes/authRouter.js"
+import authRouter from "./routes/authRouter.js";
 // + імпорт інших Роутерів
 const require = createRequire(import.meta.url);
 // const swaggerDocument = require("./swagger.json");
