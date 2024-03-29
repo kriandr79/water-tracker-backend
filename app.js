@@ -3,10 +3,13 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "./swagger.json" assert { type: "json" };
+import { createRequire } from "node:module";
+// import swaggerDocument from "./swagger.json" assert { type: "json" };
 import "./db.js";
 // import authRouter from "./routes/authRouter.js"
 // + імпорт інших Роутерів
+const require = createRequire(import.meta.url);
+const swaggerDocument = require("./swagger.json");
 
 const app = express();
 
