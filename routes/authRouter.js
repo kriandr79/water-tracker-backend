@@ -6,6 +6,7 @@ import validateBody from "../helpers/validateBody.js";
 const authRouter = express.Router();
 
 // роути
-// наприклад: authRouter.post("/register", validateBody(userSchema), registerUser);
+
+authRouter.post("/register", validateBody(registerUserSchema), registerUser);
 
 export default authRouter;
