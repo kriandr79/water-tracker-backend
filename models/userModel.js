@@ -25,11 +25,10 @@ const userSchema = new Schema({
   },
   avatarURL: {
     type: String,
-    required: true,
   },
   waterRate: {
     type: Number,
-    default: 0,
+    default: 2000,
   },
 });
 userSchema.post("save", handleMongooseError);
