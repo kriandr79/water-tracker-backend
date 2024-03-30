@@ -12,9 +12,11 @@ const registerUser = ctrlWrapper(async (req, res) => {
 	if (isPresent) throw HttpError(409, "Email already registered");
 
 	const finalPassword = await hashing.hashPassword(password);
+	// const baseName = email.split("@")[0];
 
 	const newUser = await User.create({
 		...req.body,
+		// name: baseName,
 		password: finalPassword,
 	});
 

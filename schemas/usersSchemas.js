@@ -16,13 +16,15 @@ export const registerUserSchema = Joi.object({
 	password: Joi.string()
 		.alphanum()
 		.label("Your password")
-		.min(6)
-		.max(30)
+		.min(8)
+		.max(64)
 		.required()
 		.messages({
 			"any.required": "Please provide your email and password",
 			"string.alphanum":
 				"Please only use numbers and letters for the password.",
+			"string.min": "Password must be between 8 and 64 characters long",
+			"string.max": "Password must be between 8 and 64 characters long",
 		}),
 })
 	.unknown(false)
@@ -49,13 +51,15 @@ export const logInSchema = Joi.object({
 	password: Joi.string()
 		.alphanum()
 		.label("Your password")
-		.min(6)
-		.max(30)
+		.min(8)
+		.max(64)
 		.required()
 		.messages({
 			"any.required": "Please provide your email and password",
 			"string.alphanum":
 				"Please only use numbers and letters for the password.",
+			"string.min": "Password must be between 8 and 64 characters long",
+			"string.max": "Password must be between 8 and 64 characters long",
 		}),
 })
 	.unknown(false)
