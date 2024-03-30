@@ -122,47 +122,116 @@
 				}
 			}
 		},
-		"/api/users/avatar": {
-			"post": {
-				"tags": ["User"],
-				"summary": "Change user's avatar",
-				"security": [{ "Bearer": [] }],
-				"parameters": [],
-				"requestBody": {
-					"description": "Change avatar description",
-					"required": true,
-					"content": {}
-				},
-				"responses": {}
-			}
-		},
-		"/api/users/current": {
-			"get": {
-				"tags": ["User"],
-				"summary": "Get information about current user",
-				"security": [{ "Bearer": [] }],
-				"parameters": [],
-				"requestBody": {
-					"description": "Current user decription",
-					"required": true,
-					"content": {}
-				},
-				"responses": {}
-			},
-			"patch": {
-				"tags": ["User"],
-				"summary": "Update current user's information",
-				"security": [{ "Bearer": [] }],
-				"parameters": [],
-				"requestBody": {
-					"description": "Update information about user",
-					"required": true,
-					"content": {}
-				},
-				"responses": {}
-			}
-		},
-		"/api/water/rate": {
+    "/api/users/avatar": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Change user's avatar",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Change avatar description",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeAvatarRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangeAvatarResponce"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/current": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get information about current user",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CurrentUserResponce" }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["User"],
+        "summary": "Update current user's information",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Update information about user",
+          "required": true,
+          "content": {
+            "application/json":{
+                "schema":{
+                    "$ref":"#/components/schemas/ChangeCurrentUserInfoRequest"
+                }
+            }
+          }
+        },
+        "responses": {
+            "200":{
+                "description":"Successful operation",
+                "content":{
+                    "application/json":{
+                        "schema":{
+                            "$ref":"#/components/schemas/ChangeCurrentUserInfoResponce"
+                        }
+                    }
+                }
+            },
+            "401": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedError"
+                }
+              }
+            }
+          }
+            
+        }
+      }
+    },
+    "/api/water/rate": {
 			"post": {
 				"tags": ["Water Rate"],
 				"summary": "Set user's daily water rate",
@@ -271,7 +340,6 @@
 			}
 		}
 	},
-
 	"components": {
 		"schemas": {
 			"RegistrationRequest": {
@@ -368,13 +436,134 @@
 					}
 				}
 			},
-			"securitySchemas": {
-				"Bearer": {
-					"type": "http",
-					"schema": "bearer",
-					"bearerFormat": "JWT"
-				}
-			}
-		}
-	}
+      "ChangeAvatarRequest": {
+        "type": "object",
+        "required": ["avatar"],
+        "properties": {
+          "avatar": {
+            "type": "file",
+            "description": "User's avatar",
+            "example": "avatar.jpg"
+          }
+        }
+      },
+      "ChangeCurrentUserInfoRequest":{
+        "type":"object",
+        "properties":{
+            "email":{
+                "type":"string",
+                "description":"New user's email",
+                "format":"email"
+            },
+            "name":{
+                "type":"string",
+                "description":"New user's name",
+                "example":"Fred"
+            },
+            "gender":{
+                "type":"string",
+                "description":"New user's gender",
+                "example":"Man"
+            },
+            "oldPassword":{
+                "type":"string",
+                "format": "password",
+                "description":"Outdated password",
+                "example":"qwerty123"
+            },
+            "newPassword":{
+                "type":"string",
+                "format": "password",
+                "description":"New password",
+                "example":"qwerty1234"
+            }      
+        }
+
+      },
+      
+      "ChangeAvatarResponce": {
+        "type": "object",
+        "properties": {
+          "avatarURL": {
+            "type": "string",
+            "description": "Path to user's avatar",
+            "example": "http://localhost:3000/public/avatar.jpg"
+          }
+        }
+      },
+      "CurrentUserResponce": {
+        "type": "object",
+        "properties": {
+          "avatarURL": {
+            "type": "string",
+            "description": "Path to user's avatar",
+            "example": "http://localhost:3000/public/avatar.jpg"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "example": "David"
+          },
+          "waterRate": {
+            "type": "number",
+            "description": "User's water rate",
+            "example": 2000
+          },
+          "gender":{
+            "type":"string",
+            "description":"User's gender",
+            "example":"Woman"
+          }
+        }
+      },
+      "ChangeCurrentUserInfoResponce":{
+        "type":"object",
+        "properties":{
+            "message":{
+                "type":"string",
+                "example":"Updated successfully"
+            },
+            "email":{
+                "type":"string",
+                "description":"New user's email",
+                "format":"email"
+            },
+            "name":{
+                "type":"string",
+                "description":"New user's name",
+                "example":"Fred"
+            },
+            "gender":{
+                "type":"string",
+                "description":"New user's gender",
+                "example":"Man"
+            }
+        }
+      },
+      "UnauthorizedError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Description of the error.",
+            "example": {
+              "message": "Authentication failed. Please log in."
+            }
+          }
+        }
+      }
+    },
+    "securitySchemas": {
+      "Bearer": {
+        "type": "http",
+        "schema": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
 }
