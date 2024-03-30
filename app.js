@@ -5,6 +5,7 @@ import cors from "cors";
 import "./db.js";
 
 import authRouter from "./routes/authRouter.js"
+import waterRouter from "./routes/waterRouter.js";
 
 // import swaggerDocument from "./swagger.json" assert { type: "json" };
 import { createRequire } from "node:module";
@@ -22,7 +23,7 @@ app.use(express.json());
 // routers here
 app.use("/api/auth", authRouter);
 // app.use("/api/users", usersRouter);
-// app.use("/api/water", waterRouter);
+app.use("/api/water", waterRouter);
 // app.use("/api/calendar", calendarRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use((_, res) => {
