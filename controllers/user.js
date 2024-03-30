@@ -32,14 +32,14 @@ const addAvatar = async (req, res) => {
 };
 
 const getCurrentInfo = async (req, res) => {
-  const { _id, email, name } = req.user;
+  const { _id, email, name, avatarURL, waterRate, gender } = req.user;
   const user = await User.findById(_id);
 
   if (!user) {
     throw HttpError(401, "Not authorized");
   }
 
-  res.status(200).json({ email, name });
+  res.status(200).json({ email, name, avatarURL, waterRate, gender });
 };
 
 const changeCurrentInfo = async (req, res) => {
@@ -56,7 +56,6 @@ const changeCurrentInfo = async (req, res) => {
     name = user.name,
     oldPassword = user.password,
     newPassword = user.password,
-    avatarURL = user.avatarURL,
     gender = user.gender,
   } = req.body;
 
@@ -79,7 +78,6 @@ const changeCurrentInfo = async (req, res) => {
   await User.findByIdAndUpdate(_id, {
     email,
     name,
-    avatarURL,
     gender,
   });
 
@@ -87,7 +85,6 @@ const changeCurrentInfo = async (req, res) => {
     message: "Updated successfully",
     email,
     name,
-    avatarURL,
     gender,
   });
 };

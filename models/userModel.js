@@ -34,7 +34,7 @@ const userSchema = new Schema({
   },
   waterRate: {
     type: Number,
-    default: 0,
+    default: 2000,
   },
 });
 userSchema.post("save", handleMongooseError);
