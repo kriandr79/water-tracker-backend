@@ -2,6 +2,7 @@ import gravatar from "gravatar";
 import path from "path";
 import fs from "fs/promises";
 import Jimp from "jimp";
+import bcrypt from "bcrypt";
 import ctrlWrapper from "../helpers/ctrlWrapper";
 import HttpError from "../helpers/HttpError";
 import User from "../models/userModel";
@@ -43,9 +44,56 @@ const getCurrentInfo = async (req, res) => {
 
 const changeCurrentInfo = async (req, res) => {
   const { _id } = req.user;
+
+  const user = await User.findById(_id);
+
+  if (!user) {
+    throw HttpError(401, "Not authorized");
+  }
+
+  const {
+    email = user.email,
+    name = user.name,
+    oldPassword = user.password,
+    newPassword = user.password,
+    avatarURL = user.avatarURL,
+    gender = user.gender,
+  } = req.body;
+
+  const notNeedToChangePass = await bcrypt.compare(newPassword, user.password);
+
+  if (!notNeedToChangePass) {
+    const passwordCompare = await bcrypt.compare(oldPassword, user.password);
+
+    if (!passwordCompare) {
+      throw HttpError(401, "The current password is wrong");
+    }
+
+    const hashPassword = await bcrypt.hash(newPassword, 10);
+
+    await User.findByIdAndUpdate(_id, { password: hashPassword });
+  } else {
+    await User.findByIdAndUpdate(_id, { password: oldPassword });
+  }
+
+  await User.findByIdAndUpdate(_id, {
+    email,
+    name,
+    avatarURL,
+    gender,
+  });
+
+  res.status(200).json({
+    message: "Updated successfully",
+    email,
+    name,
+    avatarURL,
+    gender,
+  });
 };
 
 export default {
   addAvatar: ctrlWrapper(addAvatar),
   getCurrentInfo: ctrlWrapper(getCurrentInfo),
+  changeCurrentInfo: ctrlWrapper(changeCurrentInfo),
 };
