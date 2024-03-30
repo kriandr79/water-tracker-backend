@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import handleMongooseError from "../helpers/handleMongooseError";
+import handleMongooseError from "../helpers/handleMongooseError.js";
 
 const emailRegexp = /^\w+([\.-]?w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -30,7 +30,6 @@ const userSchema = new Schema({
   },
   avatarURL: {
     type: String,
-    required: true,
   },
   waterRate: {
     type: Number,

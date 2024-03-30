@@ -1,33 +1,36 @@
 {
-  "openapi": "3.0.3",
-  "info": {
-    "version": "1.0.1",
-    "title": "Water track API docs - OpenAPI 3.0",
-    "description": "**Функціональні можливості**: Реєстрація та авторизація користувачів,....",
-    "consumes": ["application/json", "multipart/form-data"],
-    "produces": ["application/json"]
-  },
-  "servers": [{ "url": "http://localhost:3000" }],
-  "tags": [
-    {
-      "name": "Auth",
-      "description": "Authorization endpoints"
-    },
-    {
-      "name": "User",
-      "description": "User endpoints"
-    },
-    {
-      "name": "Water Track",
-      "description": "Water Track endpoints"
-    },
-    {
-      "name": "Calendar",
-      "description": "Calendar endpoints"
-    }
-  ],
-  "paths": {
-   "/api/auth/register": {
+	"openapi": "3.0.3",
+	"info": {
+		"version": "1.0.1",
+		"title": "Water track API docs - OpenAPI 3.0",
+		"description": "**Функціональні можливості**: Реєстрація та авторизація користувачів,....",
+		"consumes": ["application/json", "multipart/form-data"],
+		"produces": ["application/json"]
+	},
+	"servers": [
+		{ "url": "https://water-tracker-backend-ob6w.onrender.com/" },
+		{ "url": "http://localhost:3000" }
+	],
+	"tags": [
+		{
+			"name": "Auth",
+			"description": "Authorization endpoints"
+		},
+		{
+			"name": "User",
+			"description": "User endpoints"
+		},
+		{
+			"name": "Water Track",
+			"description": "Water Track endpoints"
+		},
+		{
+			"name": "Calendar",
+			"description": "Calendar endpoints"
+		}
+	],
+	"paths": {
+		"/api/auth/register": {
 			"post": {
 				"tags": ["Auth"],
 				"summary": "User registration",
@@ -337,27 +340,26 @@
 			}
 		}
 	},
-
-  "components": {
-    "schemas": {
-      "RegistrationRequest": {
-        "type": "object",
-        "required": ["email", "password"],
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "format": "password",
-            "description": "User's password",
-            "example": "qwerty123"
-          }
-        }
-      },
-      "RegistrationResponse": {
+	"components": {
+		"schemas": {
+			"RegistrationRequest": {
+				"type": "object",
+				"required": ["email", "password"],
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "User's email",
+						"format": "email"
+					},
+					"password": {
+						"type": "string",
+						"format": "password",
+						"description": "User's password",
+						"example": "qwerty123"
+					}
+				}
+			},
+			"RegistrationResponse": {
 				"type": "object",
 				"required": ["token", "user"],
 				"properties": {
@@ -379,7 +381,7 @@
 					}
 				}
 			},
-            "LoginRequest": {
+			"LoginRequest": {
 				"type": "object",
 				"required": ["email", "password"],
 				"properties": {
@@ -396,7 +398,7 @@
 					}
 				}
 			},
-            "LoginResponse": {
+			"LoginResponse": {
 				"type": "object",
 				"required": ["token", "user"],
 				"properties": {
@@ -423,7 +425,7 @@
 					}
 				}
 			},
-            "WaterRateRequest": {
+			"WaterRateRequest": {
 				"type": "object",
 				"required": ["waterRate"],
 				"properties": {

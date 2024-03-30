@@ -1,11 +1,11 @@
 import express from "express";
 import validateBody from "../helpers/validateBody.js";
-// import {... } from "../controllers/waterControllers.js";
-// import { ... } from "../schemas/waterSchemas.js";
+import waterRateUpdate from "../controllers/waterRateControllers.js";
+import auth from "../middleware/auth.js";
+import waterSchema from "../schemas/waterSchema.js";
 
 const waterRouter = express.Router();
 
-// роути
-// наприклад: waterRouter.post("/register", validateBody(waterSchema), register);
+waterRouter.post("/rate", auth, validateBody(waterSchema.waterRateSchema), waterRateUpdate);
 
 export default waterRouter;
