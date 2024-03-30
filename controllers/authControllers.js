@@ -26,7 +26,10 @@ const registerUser = ctrlWrapper(async (req, res) => {
 	await newUser.save();
 
 	res.status(201).json({
-		user: { email: newUser.email, name: newUser.name },
+		user: {
+			email: newUser.email,
+			// name: newUser.name
+		},
 		token: verificationToken,
 	});
 });
@@ -52,7 +55,10 @@ const logInUser = ctrlWrapper(async (req, res) => {
 	);
 
 	res.status(200).json({
-		user: { email: updatedUser.email, name: updatedUser.name },
+		user: {
+			email: updatedUser.email,
+			name: updatedUser.name === " " ? undefined : updatedUser.name,
+		},
 		token: updatedUser.token,
 	});
 });

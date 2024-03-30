@@ -1,277 +1,380 @@
 {
-  "openapi": "3.0.3",
-  "info": {
-    "version": "1.0.1",
-    "title": "Water track API docs - OpenAPI 3.0",
-    "description": "**Функціональні можливості**: Реєстрація та авторизація користувачів,....",
-    "consumes": ["application/json", "multipart/form-data"],
-    "produces": ["application/json"]
-  },
-  "servers": [
-    { "url": "https://water-tracker-backend-ob6w.onrender.com/" },
-    { "url": "http://localhost:3000" }
-  ],
-  "tags": [
-    {
-      "name": "Auth",
-      "description": "Authorization endpoints"
-    },
-    {
-      "name": "User",
-      "description": "User endpoints"
-    },
-    {
-      "name": "Water Track",
-      "description": "Water Track endpoints"
-    },
-    {
-      "name": "Calendar",
-      "description": "Calendar endpoints"
-    }
-  ],
-  "paths": {
-    "/api/auth/register": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "User registration",
-        "parameters": [],
-        "requestBody": {
-          "description": "Registration's object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request(invalid request body)",
-            "content": {}
-          }
-        }
-      }
-    },
-    "/api/auth/login": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "User login",
-        "parameters": [],
-        "requestBody": {
-          "description": "Login's object",
-          "required": true,
-          "content": {}
-        },
-        "responses": {}
-      }
-    },
-    "/api/auth/logout": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "User logout",
-        "security": [{ "Bearer": [] }],
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/users/avatar": {
-      "post": {
-        "tags": ["User"],
-        "summary": "Change user's avatar",
-        "security": [{ "Bearer": [] }],
-        "parameters": [],
-        "requestBody": {
-          "description": "Change avatar description",
-          "required": true,
-          "content": {}
-        },
-        "responses": {}
-      }
-    },
-    "/api/users/current": {
-      "get": {
-        "tags": ["User"],
-        "summary": "Get information about current user",
-        "security": [{ "Bearer": [] }],
-        "parameters": [],
-        "requestBody": {
-          "description": "Current user decription",
-          "required": true,
-          "content": {}
-        },
-        "responses": {}
-      },
-      "patch": {
-        "tags": ["User"],
-        "summary": "Update current user's information",
-        "security": [{ "Bearer": [] }],
-        "parameters": [],
-        "requestBody": {
-          "description": "Update information about user",
-          "required": true,
-          "content": {}
-        },
-        "responses": {}
-      }
-    },
-    "/api/water/rate": {
-      "post": {
-        "tags": ["Water Rate"],
-        "summary": "Set user's daily water rate",
-        "security": [{ "Bearer": [] }],
-        "parameters": [],
-        "requestBody": {
-          "description": "Set user's daily water rate",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/WaterRateRequest" }
-            }
-          }
-        },
-        "responses": {}
-      }
-    },
-    "/api/water": {
-      "post": {
-        "tags": ["Water Track"],
-        "summary": "Add info about drinked water",
-        "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "type": "string",
-            "description": "User's id"
-          }
-        ],
-        "requestBody": {
-          "description": "Add info about drinked water",
-          "required": true,
-          "content": {}
-        },
-        "responses": {}
-      },
-      "patch": {
-        "tags": ["Water Track"],
-        "summary": "Update info about drinked water",
-        "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "type": "string",
-            "description": "User's id"
-          }
-        ],
-        "requestBody": {
-          "description": "Update info about drinked water",
-          "required": true,
-          "content": {}
-        },
-        "responses": {}
-      },
-      "delete": {
-        "tags": ["Water Track"],
-        "summary": "Delete info about drinked water",
-        "security": [{ "Bearer": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "type": "string",
-            "description": "User's id"
-          }
-        ],
-        "requestBody": {
-          "description": "Delete info about drinked water",
-          "required": true,
-          "content": {}
-        },
-        "responses": {}
-      }
-    },
-    "/api/calendar/today": {
-      "get": {
-        "tags": ["Calendar"],
-        "summary": "Get info about drinked water today",
-        "security": [{ "Bearer": [] }],
-        "parameters": [],
-        "requestBody": {
-          "description": "Get info about drinked water today",
-          "required": true,
-          "content": {}
-        },
-        "responses": {}
-      }
-    },
-    "/api/calendar/month": {
-      "get": {
-        "tags": ["Calendar"],
-        "summary": "Get info about drinked water in a certain month",
-        "security": [{ "Bearer": [] }],
-        "parameters": [],
-        "requestBody": {
-          "description": "Get info about drinked water in a certain month",
-          "required": true,
-          "content": {}
-        },
-        "responses": {}
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "RegistrationRequest": {
-        "type": "object",
-        "required": ["email", "password"],
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password",
-            "example": "qwerty123"
-          }
-        }
-      },
-      "RegistrationResponce": {},
-      "WaterRateRequest": {
-        "type": "object",
-        "required": ["waterRate"],
-        "properties": {
-          "waterRate": {
-            "type": "number",
-            "description": "User's water rate",
-            "example": "1.5"
-          }
-        }
-      }
-    },
-    "securitySchemas": {
-      "Bearer": {
-        "type": "http",
-        "schema": "bearer",
-        "bearerFormat": "JWT"
-      }
-    }
-  }
+	"openapi": "3.0.3",
+	"info": {
+		"version": "1.0.1",
+		"title": "Water track API docs - OpenAPI 3.0",
+		"description": "**Функціональні можливості**: Реєстрація та авторизація користувачів,....",
+		"consumes": ["application/json", "multipart/form-data"],
+		"produces": ["application/json"]
+	},
+	"servers": [
+		{ "url": "https://water-tracker-backend-ob6w.onrender.com/" },
+		{ "url": "http://localhost:3000" }
+	],
+	"tags": [
+		{
+			"name": "Auth",
+			"description": "Authorization endpoints"
+		},
+		{
+			"name": "User",
+			"description": "User endpoints"
+		},
+		{
+			"name": "Water Track",
+			"description": "Water Track endpoints"
+		},
+		{
+			"name": "Calendar",
+			"description": "Calendar endpoints"
+		}
+	],
+	"paths": {
+		"/api/auth/register": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "User registration",
+				"requestBody": {
+					"description": "Registration's object",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegistrationRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Successful operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RegistrationResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request(invalid request body)",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/api/auth/login": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "User login",
+				"parameters": [],
+				"requestBody": {
+					"description": "Login's object",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequest"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Successful operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoginResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request(invalid request body)",
+						"content": {}
+					},
+					"404": {
+						"description": "Requst body properties do not match any in database",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/api/auth/logout": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "User logout",
+				"security": [{ "Bearer": [] }],
+				"responses": {
+					"204": {
+						"description": "Successful operation",
+						"content": {}
+					},
+					"400": {
+						"description": "Bad request(invalid request body)",
+						"content": {}
+					},
+					"404": {
+						"description": "Requst body properties do not match any in database",
+						"content": {}
+					}
+				}
+			}
+		},
+		"/api/users/avatar": {
+			"post": {
+				"tags": ["User"],
+				"summary": "Change user's avatar",
+				"security": [{ "Bearer": [] }],
+				"parameters": [],
+				"requestBody": {
+					"description": "Change avatar description",
+					"required": true,
+					"content": {}
+				},
+				"responses": {}
+			}
+		},
+		"/api/users/current": {
+			"get": {
+				"tags": ["User"],
+				"summary": "Get information about current user",
+				"security": [{ "Bearer": [] }],
+				"parameters": [],
+				"requestBody": {
+					"description": "Current user decription",
+					"required": true,
+					"content": {}
+				},
+				"responses": {}
+			},
+			"patch": {
+				"tags": ["User"],
+				"summary": "Update current user's information",
+				"security": [{ "Bearer": [] }],
+				"parameters": [],
+				"requestBody": {
+					"description": "Update information about user",
+					"required": true,
+					"content": {}
+				},
+				"responses": {}
+			}
+		},
+		"/api/water/rate": {
+			"post": {
+				"tags": ["Water Rate"],
+				"summary": "Set user's daily water rate",
+				"security": [{ "Bearer": [] }],
+				"parameters": [],
+				"requestBody": {
+					"description": "Set user's daily water rate",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/WaterRateRequest" }
+						}
+					}
+				},
+				"responses": {}
+			}
+		},
+		"/api/water": {
+			"post": {
+				"tags": ["Water Track"],
+				"summary": "Add info about drinked water",
+				"security": [{ "Bearer": [] }],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"type": "string",
+						"description": "User's id"
+					}
+				],
+				"requestBody": {
+					"description": "Add info about drinked water",
+					"required": true,
+					"content": {}
+				},
+				"responses": {}
+			},
+			"patch": {
+				"tags": ["Water Track"],
+				"summary": "Update info about drinked water",
+				"security": [{ "Bearer": [] }],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"type": "string",
+						"description": "User's id"
+					}
+				],
+				"requestBody": {
+					"description": "Update info about drinked water",
+					"required": true,
+					"content": {}
+				},
+				"responses": {}
+			},
+			"delete": {
+				"tags": ["Water Track"],
+				"summary": "Delete info about drinked water",
+				"security": [{ "Bearer": [] }],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"type": "string",
+						"description": "User's id"
+					}
+				],
+				"requestBody": {
+					"description": "Delete info about drinked water",
+					"required": true,
+					"content": {}
+				},
+				"responses": {}
+			}
+		},
+		"/api/calendar/today": {
+			"get": {
+				"tags": ["Calendar"],
+				"summary": "Get info about drinked water today",
+				"security": [{ "Bearer": [] }],
+				"parameters": [],
+				"requestBody": {
+					"description": "Get info about drinked water today",
+					"required": true,
+					"content": {}
+				},
+				"responses": {}
+			}
+		},
+		"/api/calendar/month": {
+			"get": {
+				"tags": ["Calendar"],
+				"summary": "Get info about drinked water in a certain month",
+				"security": [{ "Bearer": [] }],
+				"parameters": [],
+				"requestBody": {
+					"description": "Get info about drinked water in a certain month",
+					"required": true,
+					"content": {}
+				},
+				"responses": {}
+			}
+		}
+	},
+
+	"components": {
+		"schemas": {
+			"RegistrationRequest": {
+				"type": "object",
+				"required": ["email", "password"],
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "User's email",
+						"format": "email"
+					},
+					"password": {
+						"type": "string",
+						"format": "password",
+						"description": "User's password",
+						"example": "qwerty123"
+					}
+				}
+			},
+			"RegistrationResponse": {
+				"type": "object",
+				"required": ["token", "user"],
+				"properties": {
+					"token": {
+						"type": "string",
+						"description": "User's token",
+						"example": "<JWT>"
+					},
+					"user": {
+						"type": "object",
+						"required": ["email"],
+						"properties": {
+							"email": {
+								"type": "string",
+								"description": "User's email",
+								"example": "<EMAIL>"
+							}
+						}
+					}
+				}
+			},
+			"LoginRequest": {
+				"type": "object",
+				"required": ["email", "password"],
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "User's email",
+						"format": "email"
+					},
+					"password": {
+						"type": "string",
+						"format": "password",
+						"description": "User's password",
+						"example": "qwerty123"
+					}
+				}
+			},
+			"LoginResponse": {
+				"type": "object",
+				"required": ["token", "user"],
+				"properties": {
+					"token": {
+						"type": "string",
+						"description": "User's token",
+						"example": "<JWT>"
+					},
+					"user": {
+						"type": "object",
+						"required": ["email"],
+						"properties": {
+							"email": {
+								"type": "string",
+								"description": "User's email",
+								"example": "<EMAIL>"
+							},
+							"name": {
+								"type": "string",
+								"description": "User's name",
+								"example": "<USERNAME>"
+							}
+						}
+					}
+				}
+			},
+			"WaterRateRequest": {
+				"type": "object",
+				"required": ["waterRate"],
+				"properties": {
+					"waterRate": {
+						"type": "number",
+						"description": "User's water rate",
+						"example": "1.5"
+					}
+				}
+			},
+			"securitySchemas": {
+				"Bearer": {
+					"type": "http",
+					"schema": "bearer",
+					"bearerFormat": "JWT"
+				}
+			}
+		}
+	}
 }
