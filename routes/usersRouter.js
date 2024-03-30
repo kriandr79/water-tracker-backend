@@ -1,11 +1,7 @@
 import express from "express";
 import upload from "../middleware/upload.js";
 import auth from "../middleware/auth.js";
-import {
-  addAvatar,
-  getCurrentInfo,
-  changeCurrentInfo,
-} from "../controllers/user.js";
+import userControllers from "../controllers/user.js";
 
 // import authenticate from "../middleware"
 // import {... } from "../controllers/usersControllers.js";
@@ -15,8 +11,13 @@ const usersRouter = express.Router();
 
 // роути
 // наприклад: usersRouter.post("/avatar", validateBody(userSchema), uploadAvatar);
-usersRouter.get("/current", auth, getCurrentInfo);
-usersRouter.post("/avatar", auth, upload.single("avatar"), addAvatar);
-usersRouter.patch("/current", auth, changeCurrentInfo);
+usersRouter.get("/current", auth, userControllers.getCurrentInfo);
+usersRouter.post(
+  "/avatar",
+  auth,
+  upload.single("avatar"),
+  userControllers.addAvatar
+);
+usersRouter.patch("/current", auth, userControllers.changeCurrentInfo);
 
 export default usersRouter;
