@@ -1,13 +1,19 @@
-import gravatar from "gravatar";
 import path from "path";
 import fs from "fs/promises";
 import Jimp from "jimp";
 import bcrypt from "bcrypt";
-import ctrlWrapper from "../helpers/ctrlWrapper";
-import HttpError from "../helpers/HttpError";
-import User from "../models/userModel";
+import ctrlWrapper from "../helpers/ctrlWrapper.js";
+import HttpError from "../helpers/HttpError.js";
+import User from "../models/userModel.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
-const avatarDir = path.join(__dirname, "../", "public", "avatars");
+const avatarDir = path.join(
+  dirname(fileURLToPath(import.meta.url)),
+  "../",
+  "public",
+  "avatars"
+);
 
 const addAvatar = async (req, res) => {
   const { _id } = req.user;
