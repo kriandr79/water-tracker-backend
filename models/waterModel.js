@@ -7,12 +7,12 @@ const waterSchema = new Schema({
 		ref: "User",
 	},
 	date: {
-		type: Date,
-		required: true,
+		type: String,
+		// required: true,
 	},
 	time: {
 		type: String,
-		required: true,
+		// required: true,
 	},
 	value: {
 		type: Number,
@@ -23,15 +23,15 @@ const waterSchema = new Schema({
 		ref: "User.waterRate",
 	},
 });
-waterSchema.pre("save", function (next) {
-	const currentDate = new Date();
-	this.date = currentDate;
-	this.time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
-	next();
-});
+// waterSchema.pre("save", function (next) {
+// 	const currentDate = new Date();
+// 	this.date = currentDate;
+// 	this.time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
+// 	next();
+// });
 
 waterSchema.post("save", handleMongooseError);
 
-const waterModel = model("user", waterSchema);
+const Water = model("water", waterSchema);
 
-export default waterModel;
+export default Water;

@@ -17,7 +17,7 @@ waterRouter.post(
 waterRouter.post(
 	"/",
 	auth,
-	validateBody(waterSchema.waterRateSchema),
+	validateBody(waterSchema.waterEntrySchema),
 	waterControllers.waterEntry
 );
 
