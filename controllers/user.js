@@ -63,19 +63,14 @@ const changeCurrentInfo = async (req, res) => {
   const {
     email = user.email,
     name = user.name,
-    oldPassword = user.password,
-    newPassword = user.password,
+    oldPassword,
+    newPassword,
     gender = user.gender,
   } = req.body;
 
-  console.log(newPassword);
+  const condition = newPassword !== undefined && oldPassword !== undefined;
 
-  const notNeedToChangePass = await hashing.comparePasswords(
-    newPassword,
-    user.password
-  );
-
-  if (!notNeedToChangePass) {
+  if (condition) {
     const passwordCompare = await hashing.comparePasswords(
       oldPassword,
       user.password
@@ -88,8 +83,6 @@ const changeCurrentInfo = async (req, res) => {
     const hashPassword = await hashing.hashPassword(newPassword, 10);
 
     await User.findByIdAndUpdate(id, { password: hashPassword });
-  } else {
-    await User.findByIdAndUpdate(id, { password: oldPassword });
   }
 
   await User.findByIdAndUpdate(id, {
