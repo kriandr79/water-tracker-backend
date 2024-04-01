@@ -23,12 +23,6 @@ const waterSchema = new Schema({
 		ref: "User.waterRate",
 	},
 });
-// waterSchema.pre("save", function (next) {
-// 	const currentDate = new Date();
-// 	this.date = currentDate;
-// 	this.time = `${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`;
-// 	next();
-// });
 
 waterSchema.post("save", handleMongooseError);
 
