@@ -12,7 +12,7 @@ const usersRouter = express.Router();
 // роути
 // наприклад: usersRouter.post("/avatar", validateBody(userSchema), uploadAvatar);
 usersRouter.get("/current", auth, userControllers.getCurrentInfo);
-usersRouter.post(
+usersRouter.patch(
   "/avatar",
   auth,
   upload.single("avatar"),
