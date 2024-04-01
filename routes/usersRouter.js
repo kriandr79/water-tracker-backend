@@ -2,10 +2,11 @@ import express from "express";
 import upload from "../middleware/upload.js";
 import auth from "../middleware/auth.js";
 import userControllers from "../controllers/user.js";
+import validateBody from "../helpers/validateBody.js";
 
 // import authenticate from "../middleware"
 // import {... } from "../controllers/usersControllers.js";
-// import { ... } from "../schemas/usersSchemas.js";
+import { currentChangeSchema } from "../schemas/usersSchemas.js";
 
 const usersRouter = express.Router();
 
@@ -18,6 +19,11 @@ usersRouter.patch(
   upload.single("avatar"),
   userControllers.addAvatar
 );
-usersRouter.patch("/current", auth, userControllers.changeCurrentInfo);
+usersRouter.patch(
+  "/current",
+  auth,
+  validateBody(currentChangeSchema),
+  userControllers.changeCurrentInfo
+);
 
 export default usersRouter;
