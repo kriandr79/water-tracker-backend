@@ -7,6 +7,7 @@ import "./db.js";
 import authRouter from "./routes/authRouter.js";
 import waterRouter from "./routes/waterRouter.js";
 import usersRouter from "./routes/usersRouter.js";
+import calendarRouter from "./routes/calendarRouter.js";
 
 
 // import swaggerDocument from "./swagger.json" assert { type: "json" };
@@ -26,7 +27,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/water", waterRouter);
-// app.use("/api/calendar", calendarRouter);
+app.use("/api/calendar", calendarRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use((_, res) => {
 	res.status(404).json({ message: "Route not found" });
