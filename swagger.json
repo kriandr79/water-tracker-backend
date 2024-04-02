@@ -253,50 +253,87 @@
 				"tags": ["Water Track"],
 				"summary": "Add info about drinked water",
 				"security": [{ "Bearer": [] }],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"type": "string",
-						"description": "User's id"
-					}
-				],
 				"requestBody": {
 					"description": "Add info about drinked water",
 					"required": true,
-					"content": {}
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/WaterEntryRequest"
+							}
+						}
+					}
 				},
-				"responses": {}
+				"responses": {
+					"201": {
+						"description": "Successful operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/WaterEntryResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request(invalid request body)",
+						"content": {}
+					}
+				}
 			},
 			"patch": {
 				"tags": ["Water Track"],
-				"summary": "Update info about drinked water",
+				"summary": "Update info in an entry about drinked water",
 				"security": [{ "Bearer": [] }],
 				"parameters": [
 					{
 						"in": "path",
-						"name": "userId",
+						"name": "_id",
 						"required": true,
 						"type": "string",
-						"description": "User's id"
+						"description": "Entry's ID (MongoDB ObjectID)"
 					}
 				],
 				"requestBody": {
-					"description": "Update info about drinked water",
+					"description": "Update info to pass to database",
 					"required": true,
-					"content": {}
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PatchEntryRequest"
+							}
+						}
+					}
 				},
-				"responses": {}
+				"responses": {
+					"200": {
+						"description": "Successful operation",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PatchEntryResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad request(invalid request body)",
+						"content": {}
+					},
+					"404": {
+						"description": "URL parameter does not match any in database",
+						"content": {}
+					}
+				}
 			},
 			"delete": {
 				"tags": ["Water Track"],
-				"summary": "Delete info about drinked water",
+				"summary": "Delete entry about drinked water",
 				"security": [{ "Bearer": [] }],
 				"parameters": [
 					{
 						"in": "path",
-						"name": "userId",
+						"name": "_id",
 						"required": true,
 						"type": "string",
 						"description": "User's id"
@@ -436,6 +473,136 @@
 					}
 				}
 			},
+			"WaterEntryRequest": {
+				"type": "object",
+				"required": ["value", "date", "time"],
+				"properties": {
+					"value": {
+						"type": "number",
+						"description": "Number of milliliters entered in request",
+						"example": 355
+					},
+					"date": {
+						"type": "string",
+						"description": "Date in format 'dd.mm.yy'",
+						"pattern": "^\\d{2}\\.\\d{2}\\.\\d{4}$",
+						"example": "01.04.2024"
+					},
+					"time": {
+						"type": "string",
+						"description": "Time in format hh:mm",
+						"example": "12:30",
+						"pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+					}
+				}
+			},
+			"WaterEntryResponse": {
+				"type": "object",
+				"required": ["value", "date", "time", "id", "waterRate"],
+				"properties": {
+					"value": {
+						"type": "number",
+						"description": "Value of water entered in request",
+						"example": 350
+					},
+					"waterRate": {
+						"type": "number",
+						"description": "User's dayly norm of water",
+						"example": 6000
+					},
+					"date": {
+						"type": "string",
+						"description": "Date in format 'dd.mm.yy'",
+						"pattern": "^\\d{2}\\.\\d{2}\\.\\d{4}$",
+						"example": "01.04.2024"
+					},
+					"time": {
+						"type": "string",
+						"description": "Time in format hh:mm",
+						"example": "12:30",
+						"pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+					},
+					"id": {
+						"type": "string",
+						"description": "Entry's ID (MongoDB ObjectID)",
+						"example": "507f191e810c19729de860ea"
+					}
+				}
+			},
+
+			"PatchEntryRequest": {
+				"type": "object",
+				"oneOf": [
+					{
+						"required": ["value"]
+					},
+					{
+						"required": ["time"]
+					},
+					{
+						"required": ["value", "time"]
+					}
+				],
+				"properties": {
+					"value": {
+						"type": "number",
+						"description": "Number of milliliters entered in request",
+						"example": 355
+					},
+					"time": {
+						"type": "string",
+						"description": "Time in format hh:mm",
+						"example": "12:30",
+						"pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+					}
+				}
+			},
+			"PatchEntryResponse": {
+				"type": "object",
+				"oneOf": [
+					{
+						"required": ["value", "date", "id", "waterRate"]
+					},
+					{
+						"required": ["time", "date", "id", "waterRate"]
+					},
+					{
+						"required": ["value", "time", "date", "id", "waterRate"]
+					}
+				],
+				"properties": {
+					"value": {
+						"type": "number",
+						"description": "Value of water entered in request",
+						"example": 350
+					},
+					"time": {
+						"type": "string",
+						"description": "Time in format hh:mm",
+						"example": "12:30",
+						"pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+					},
+					"waterRate": {
+						"type": "number",
+						"description": "User's dayly norm of water",
+						"example": 6000
+					},
+					"date": {
+						"type": "string",
+						"description": "Date in format 'dd.mm.yy'",
+						"pattern": "^\\d{2}\\.\\d{2}\\.\\d{4}$",
+						"example": "01.04.2024"
+					},
+					"id": {
+						"type": "string",
+						"description": "Entry's ID (MongoDB ObjectID)",
+						"example": "507f191e810c19729de860ea"
+					}
+				}
+			},
+
+			"DeleteEntryResponse": {},
+
 			"ChangeAvatarRequest": {
 				"type": "object",
 				"required": ["avatar"],
