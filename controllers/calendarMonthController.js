@@ -1,50 +1,52 @@
 import HttpError from "../helpers/HttpError.js";
 import User from "../models/userModel.js";
+import Water from "../models/waterModel.js";
 import ctrlWrapper from "../helpers/ctrlWrapper.js";
 
 const calendarMonth = ctrlWrapper(async (req, res, next) => {
   const owner = req.user.id;
   const { month, year } = req.body;
 
-  const drinks = [
-    { day: 1, waterRate: 2000, ml: 100 },
-    { day: 1, waterRate: 2000, ml: 100 },
-    { day: 1, waterRate: 2000, ml: 100 },
-    { day: 1, waterRate: 2000, ml: 100 },
-    { day: 2, waterRate: 4000, ml: 400 },
-    { day: 2, waterRate: 4000, ml: 400 },
-    { day: 2, waterRate: 4000, ml: 300 },
-    { day: 2, waterRate: 4000, ml: 400 },
-    { day: 4, waterRate: 1000, ml: 500 },
-    { day: 4, waterRate: 1000, ml: 500 },
-    { day: 4, waterRate: 1000, ml: 500 },
-    { day: 4, waterRate: 1000, ml: 500 },
-    { day: 5, waterRate: 5000, ml: 1400 },
-  ];
+  const daysInMonth = new Date(year, month, 0).getDate(); // Кількість днів в обраному місяці
+  const summary = {};  // об'єкт результату
+  const searchKey = `^[0-9]{2}.${month}.${year}$`; // ключ для пошуку по даті
 
   try {
     const user = await User.findOne({ _id: owner }, { waterRate: 1 }); // беремо норму води юзера
     const userDefaultWaterRate = user.waterRate;
 
-    const daysInMarch = new Date(year, month, 0).getDate(); // Кількість днів в обраному місяці
-    const summary = {};
+    const drinks = await Water.find({
+      owner,
+      date: { $regex: searchKey, $options: "i" },
+    }); // беремо дрінки за обраний місяць
 
-    for (let day = 1; day <= daysInMarch; day++) {
-      const date = new Date(year, month - 1, day); // Месяцы в JavaScript начинаются с 0, поэтому уменьшаем на 1
+    // Створюємо масив днів обраного місяця, та підвязуємо дані по дрінках
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month - 1, day); // місяць починаєтся 0, зменьшуємо на 1
+
+      // Форматуємо дату дня під тот формат який в базі, та ддя відображення в календарі на фронті
       const formattedDate = date.toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
       });
+      const formattedDay = date.toLocaleDateString("uk-UA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
 
-      const filteredDrinks = drinks.filter((item) => item.day === day);
-      const count = filteredDrinks.length;
+      const filteredDrinks = drinks.filter(
+        (item) => item.date === formattedDay
+      ); // масив дрінків дня
+      const count = filteredDrinks.length; // кількість дрінків за день (довжина масиву)
       const dayWaterRate =
-        count > 0 ? filteredDrinks[0].waterRate : user.waterRate; // дневная норма по умолчанию как установлена у юзера
-      const totalMl = filteredDrinks.reduce((acc, cur) => acc + cur.ml, 0);
-      const percent = (totalMl * 100) / dayWaterRate;
+        count > 0 ? filteredDrinks[0].waterRate : userDefaultWaterRate; // якщо є дрінкі за день, беремо норму з них, ящкщо немає ставимо дефотлтне значення
+      const totalMl = filteredDrinks.reduce((acc, cur) => acc + cur.value, 0); // кількість спожитої води за день, в мл
+      const percent = Math.round((totalMl * 100) / dayWaterRate); // процент спожитої воду від денної норми, округлюємо до цілого значення
 
       summary[day] = {
-        dayNumber,
+        day,
+        formattedDay,
         formattedDate,
         dayWaterRate,
         count,
@@ -53,47 +55,10 @@ const calendarMonth = ctrlWrapper(async (req, res, next) => {
       };
     }
 
-    console.log(summary);
-
-    // const daysInMonth = new Date(year, month, 0).getDate(); // Получаем количество дней в указанном месяце
-
-    // const daysInMonthArray = [];
-
-    // for (let day = 1; day <= daysInMonth; day++) {
-    //   const date = new Date(year, month - 1, day); // Месяцы в JavaScript начинаются с 0, поэтому уменьшаем на 1
-
-    //   const dayObject = {
-    //     day: date.getDate(),
-    //     month: date.getMonth() + 1, // Добавляем 1, так как месяцы начинаются с 0
-    //     year: date.getFullYear(),
-    //   };
-
-    //   daysInMonthArray.push(dayObject);
-    // }
-
     res.status(200).json(summary);
   } catch (error) {
     next(error);
   }
-
-
-
-  // const summary = drinks.reduce((acc, cur) => {
-  //   const { waterRate, day, ml } = cur;
-  //   acc[day] = acc[day] || { count: 0, waterRate, totalMl: 0 };
-  //   acc[day].count++;
-  //   acc[day].totalMl += ml;
-  //   acc[day].percent = (acc[day].totalMl * 100) / waterRate;
-  //   return acc;
-  // }, {});
-
-  //
-
-  // Вертає
-  // [{date, waterRate, procent, drinksQuantity}]
-  //
-  //
-  //
 });
 
 export default calendarMonth;
