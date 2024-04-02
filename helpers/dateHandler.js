@@ -1,4 +1,4 @@
-const dateHandler = (currentDate) => {
+const dateHandler = (currentDate = new Date()) => {
 	const dateFormatter = new Intl.DateTimeFormat("uk-UA", {
 		year: "numeric",
 		month: "2-digit",

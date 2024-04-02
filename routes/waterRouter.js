@@ -21,4 +21,13 @@ waterRouter.post(
 	waterControllers.waterEntry
 );
 
+waterRouter.patch(
+	"/:_id",
+	auth,
+	validateBody(waterSchema.waterEntryEditSchema),
+	waterControllers.patchEntry
+);
+
+waterRouter.delete("/:_id", auth, waterControllers.deleteEntry);
+
 export default waterRouter;
