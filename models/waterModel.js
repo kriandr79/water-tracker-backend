@@ -8,11 +8,11 @@ const waterSchema = new Schema({
 	},
 	date: {
 		type: String,
-		// required: true,
+		required: true,
 	},
 	time: {
 		type: String,
-		// required: true,
+		required: true,
 	},
 	value: {
 		type: Number,
