@@ -23,7 +23,7 @@ const countWaterUseToday = async (req, res) => {
       { time: 1, value: 1 }
     );
     const totalMl = takingWater.reduce((acc, cur) => acc + cur.value, 0);
-    const percent = (totalMl * 100) / dailyWaterRate;
+    const percent = Math.round((totalMl * 100) / dailyWaterRate);
 
     res.status(200).json({
       percent,
