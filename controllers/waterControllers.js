@@ -23,10 +23,12 @@ const waterEntry = ctrlWrapper(async (req, res) => {
 			waterRate: currentUser.waterRate,
 		});
 
-		res.status(200).json({
+		res.status(201).json({
 			value: newEntry.value,
 			time: newEntry.time,
 			date: newEntry.date,
+			id: newEntry._id,
+			waterRate: newEntry.waterRate,
 		});
 
 		return;
@@ -40,7 +42,7 @@ const waterEntry = ctrlWrapper(async (req, res) => {
 		waterRate: currentUser.waterRate,
 	});
 
-	res.status(200).json({
+	res.status(201).json({
 		value: newEntry.value,
 		time: newEntry.time,
 		date: newEntry.date,
@@ -60,7 +62,13 @@ const patchEntry = ctrlWrapper(async (req, res) => {
 	);
 	if (editedEntry === null) throw HttpError(404, "Entry not found");
 
-	res.status(200).json(editedEntry);
+	res.status(200).json({
+		value: editedEntry.value,
+		time: editedEntry.time,
+		date: editedEntry.date,
+		waterRate: editedEntry.waterRate,
+		id: editedEntry._id,
+	});
 
 	return;
 });
@@ -75,7 +83,13 @@ const deleteEntry = ctrlWrapper(async (req, res) => {
 	);
 	if (deletedEntry === null) throw HttpError(404, "Entry not found");
 
-	res.status(200).json(deletedEntry);
+	res.status(200).json({
+		value: deletedEntry.value,
+		time: deletedEntry.time,
+		date: deletedEntry.date,
+		waterRate: deletedEntry.waterRate,
+		id: deletedEntry._id,
+	});
 
 	return;
 });
