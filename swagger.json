@@ -806,7 +806,9 @@
 					},
 					"takingWater": {
 						"type": "array",
-						"properties": {
+						"items":{
+							"type":"object",
+							"properties": {
 							"time": {
 								"type": "string",
 								"description": "The time when user drank water",
@@ -817,6 +819,7 @@
 								"description": "The amount of milliliters of water the user drank",
 								"example": 600
 							}
+						}
 						}
 					}
 				}
