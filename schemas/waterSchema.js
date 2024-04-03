@@ -1,6 +1,7 @@
 import Joi from "joi";
 
 const waterRateSchema = Joi.object({
+	date: Joi.string().required(),
 	waterRate: Joi.number().required().min(50).max(15000),
 });
 
