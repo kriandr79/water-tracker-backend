@@ -8,7 +8,7 @@ const calendarMonth = ctrlWrapper(async (req, res, next) => {
   const { month, year } = req.body;
 
   const daysInMonth = new Date(year, month, 0).getDate(); // Кількість днів в обраному місяці
-  const summary = {};  // об'єкт результату
+  const data = {}; // объект масив для результату
   const searchKey = `^[0-9]{2}.${month}.${year}$`; // ключ для пошуку по даті
 
   try {
@@ -44,18 +44,24 @@ const calendarMonth = ctrlWrapper(async (req, res, next) => {
       const totalMl = filteredDrinks.reduce((acc, cur) => acc + cur.value, 0); // кількість спожитої води за день, в мл
       const percent = Math.round((totalMl * 100) / dayWaterRate); // процент спожитої воду від денної норми, округлюємо до цілого значення
 
-      summary[day] = {
-        day,
-        formattedDay,
-        formattedDate,
-        dayWaterRate,
-        count,
-        totalMl,
-        percent,
+      data[day] = {
+          day,
+          formattedDay,
+          formattedDate,
+          dayWaterRate,
+          count,
+          totalMl,
+          percent,
       };
     }
 
-    res.status(200).json(summary);
+    const result = {
+      month,
+      year,
+      data
+    };
+
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
