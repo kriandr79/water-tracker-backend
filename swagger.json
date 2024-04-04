@@ -463,6 +463,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "RegistrationRequest": {
         "type": "object",
@@ -975,13 +982,6 @@
             }
           }
         }
-      }
-    },
-    "securitySchemas": {
-      "Bearer": {
-        "type": "http",
-        "schema": "bearer",
-        "bearerFormat": "JWT"
       }
     }
   }
