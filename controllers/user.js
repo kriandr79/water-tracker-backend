@@ -1,19 +1,26 @@
-import gravatar from "gravatar";
 import path from "path";
 import fs from "fs/promises";
 import Jimp from "jimp";
-import bcrypt from "bcrypt";
-import ctrlWrapper from "../helpers/ctrlWrapper";
-import HttpError from "../helpers/HttpError";
-import User from "../models/userModel";
+import ctrlWrapper from "../helpers/ctrlWrapper.js";
+import HttpError from "../helpers/HttpError.js";
+import User from "../models/userModel.js";
+import hashing from "../helpers/hashing.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
-const avatarDir = path.join(__dirname, "../", "public", "avatars");
+const avatarDir = path.join(
+  dirname(fileURLToPath(import.meta.url)),
+  "../",
+  "public",
+  "avatars"
+);
 
 const addAvatar = async (req, res) => {
-  const { _id } = req.user;
+  const { id } = req.user;
+  console.log(req.user);
   const { path: tempUpload, originalname } = req.file;
 
-  const filename = `${_id}_${originalname}`;
+  const filename = `${id}_${originalname}`;
 
   const resultUpload = path.join(avatarDir, filename);
   await fs.rename(tempUpload, resultUpload);
@@ -24,7 +31,7 @@ const addAvatar = async (req, res) => {
 
   const avatarURL = path.join("avatars", filename);
 
-  await User.findByIdAndUpdate(_id, { avatarURL });
+  await User.findByIdAndUpdate(id, { avatarURL });
 
   res.status(200).json({
     avatarURL,
@@ -32,20 +39,22 @@ const addAvatar = async (req, res) => {
 };
 
 const getCurrentInfo = async (req, res) => {
-  const { _id, email, name, avatarURL, waterRate, gender } = req.user;
-  const user = await User.findById(_id);
+  const { id } = req.user;
+  const user = await User.findById(id);
 
   if (!user) {
     throw HttpError(401, "Not authorized");
   }
 
+  const { email, name, avatarURL, waterRate, gender } = user;
+
   res.status(200).json({ email, name, avatarURL, waterRate, gender });
 };
 
 const changeCurrentInfo = async (req, res) => {
-  const { _id } = req.user;
+  const { id } = req.user;
 
-  const user = await User.findById(_id);
+  const user = await User.findById(id);
 
   if (!user) {
     throw HttpError(401, "Not authorized");
@@ -54,28 +63,29 @@ const changeCurrentInfo = async (req, res) => {
   const {
     email = user.email,
     name = user.name,
-    oldPassword = user.password,
-    newPassword = user.password,
+    oldPassword,
+    newPassword,
     gender = user.gender,
   } = req.body;
 
-  const notNeedToChangePass = await bcrypt.compare(newPassword, user.password);
+  const condition = newPassword !== undefined && oldPassword !== undefined;
 
-  if (!notNeedToChangePass) {
-    const passwordCompare = await bcrypt.compare(oldPassword, user.password);
+  if (condition) {
+    const passwordCompare = await hashing.comparePasswords(
+      oldPassword,
+      user.password
+    );
 
     if (!passwordCompare) {
       throw HttpError(401, "The current password is wrong");
     }
 
-    const hashPassword = await bcrypt.hash(newPassword, 10);
+    const hashPassword = await hashing.hashPassword(newPassword, 10);
 
-    await User.findByIdAndUpdate(_id, { password: hashPassword });
-  } else {
-    await User.findByIdAndUpdate(_id, { password: oldPassword });
+    await User.findByIdAndUpdate(id, { password: hashPassword });
   }
 
-  await User.findByIdAndUpdate(_id, {
+  await User.findByIdAndUpdate(id, {
     email,
     name,
     gender,
