@@ -255,7 +255,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WaterRateEntryResponse"
+                  "$ref": "#/components/schemas/WaterRateResponse"
                 }
               }
             }
