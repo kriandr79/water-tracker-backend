@@ -17,7 +17,6 @@ const avatarDir = path.join(
 
 const addAvatar = async (req, res) => {
   const { id } = req.user;
-  console.log(req.user);
   const { path: tempUpload, originalname } = req.file;
 
   const filename = `${id}_${originalname}`;
