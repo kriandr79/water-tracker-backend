@@ -380,7 +380,7 @@
       }
     },
     "/api/calendar/today": {
-      "get": {
+      "post": {
         "tags": ["Calendar"],
         "summary": "Get info about drinked water today",
         "security": [{ "Bearer": [] }],
@@ -421,7 +421,7 @@
       }
     },
     "/api/calendar/month": {
-      "get": {
+      "post": {
         "tags": ["Calendar"],
         "summary": "Get info about drinked water in a certain month",
         "security": [{ "Bearer": [] }],

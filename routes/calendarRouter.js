@@ -10,8 +10,8 @@ const calendarRouter = express.Router();
 
 // роути
 // наприклад: calendarRouter.post("/today", validateBody(userSchema), consumptionToday);
-calendarRouter.get("/today", auth, calendarControllers.countWaterUseToday);
-calendarRouter.get(
+calendarRouter.post("/today", auth, calendarControllers.countWaterUseToday);
+calendarRouter.post(
   "/month",
   auth,
   validateBody(calendarMonthSchema),
