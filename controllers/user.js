@@ -47,7 +47,7 @@ const getCurrentInfo = async (req, res) => {
 
   const { email, name, avatarURL, waterRate, gender } = user;
 
-  res.status(200).json({ email, name, avatarURL, waterRate, gender });
+  res.status(200).json({ email, name, avatarURL, dailyNorma: waterRate, gender });
 };
 
 const changeCurrentInfo = async (req, res) => {
