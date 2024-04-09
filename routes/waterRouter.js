@@ -4,6 +4,7 @@ import waterRateUpdate from "../controllers/waterRateControllers.js";
 import waterControllers from "../controllers/waterControllers.js";
 import auth from "../middleware/auth.js";
 import waterSchema from "../schemas/waterSchema.js";
+import isValidId from "../middleware/validateID.js";
 
 const waterRouter = express.Router();
 
@@ -22,12 +23,13 @@ waterRouter.post(
 );
 
 waterRouter.patch(
-	"/:_id",
+	"/:id",
+	isValidId,
 	auth,
 	validateBody(waterSchema.waterEntryEditSchema),
 	waterControllers.patchEntry
 );
 
-waterRouter.delete("/:_id", auth, waterControllers.deleteEntry);
+waterRouter.delete("/:id", isValidId, auth, waterControllers.deleteEntry);
 
 export default waterRouter;
