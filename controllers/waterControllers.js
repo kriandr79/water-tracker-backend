@@ -53,7 +53,7 @@ const waterEntry = ctrlWrapper(async (req, res) => {
 const patchEntry = ctrlWrapper(async (req, res) => {
 	const { id: owner } = req.user;
 	const { value = undefined, time = undefined } = req.body;
-	const { _id } = req.params;
+	const { id: _id } = req.params;
 
 	const editedEntry = await Water.findOneAndUpdate(
 		{ _id, owner },
@@ -75,7 +75,7 @@ const patchEntry = ctrlWrapper(async (req, res) => {
 
 const deleteEntry = ctrlWrapper(async (req, res) => {
 	const { id: owner } = req.user;
-	const { _id } = req.params;
+	const { id: _id } = req.params;
 
 	const deletedEntry = await Water.findOneAndDelete(
 		{ _id, owner },
