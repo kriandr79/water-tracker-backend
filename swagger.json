@@ -759,7 +759,8 @@
           "email": {
             "type": "string",
             "description": "New user's email",
-            "format": "email"
+            "format": "email",
+            "example":"mainuser@gmail.com"
           },
           "name": {
             "type": "string",
@@ -769,6 +770,7 @@
           "gender": {
             "type": "string",
             "description": "New user's gender",
+            "enum":["", "Woman", "Man"],
             "example": "Man"
           },
           "oldPassword": {
@@ -846,7 +848,8 @@
           "email": {
             "type": "string",
             "description": "New user's email",
-            "format": "email"
+            "format": "email",
+             "example":"mainuser@gmail.com"
           },
           "name": {
             "type": "string",
