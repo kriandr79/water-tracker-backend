@@ -61,8 +61,11 @@ const changeCurrentInfo = async (req, res) => {
     gender = user.gender,
   } = req.body;
 
-  const emailExists = await User.findOne({ email });
-  if (emailExists) throw HttpError(409, "Email already registered");
+  if (email !== user.email) {
+    const emailExists = await User.findOne({ email });
+    if (emailExists) throw HttpError(409, "Email already registered");
+    return;
+  }
 
   const condition = newPassword !== undefined && oldPassword !== undefined;
 
