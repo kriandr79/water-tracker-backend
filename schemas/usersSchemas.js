@@ -82,7 +82,7 @@ export const currentChangeSchema = Joi.object({
       "string.email": "Please provide a valid email address",
     }),
   name: Joi.string()
-    .alphanum()
+    .regex(/^[a-zA-Z0-9\s]*$/)
     .label("Your name")
     .min(1)
     .max(20)
@@ -91,12 +91,11 @@ export const currentChangeSchema = Joi.object({
       "string.alphanum": "Please only use numbers and letters for the name.",
       "string.min": "Name must be between 1 and 20 characters long",
       "string.max": "Name must be between 1 and 20 characters long",
-    })
-    .pattern(new RegExp(".*\\S.*")),
+    }),
   gender: Joi.string()
     .alphanum()
     .label("Your gender")
-    .valid("", "Woman", "Man"),
+    .valid("", "woman", "man"),
   oldPassword: Joi.string()
     .alphanum()
     .label("Your password")
