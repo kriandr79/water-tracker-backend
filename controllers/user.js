@@ -41,23 +41,17 @@ const getCurrentInfo = async (req, res) => {
   const { id } = req.user;
   const user = await User.findById(id);
 
-  if (!user) {
-    throw HttpError(401, "Not authorized");
-  }
-
   const { email, name, avatarURL, waterRate, gender } = user;
 
-  res.status(200).json({ email, name, avatarURL, dailyNorma: waterRate, gender });
+  res
+    .status(200)
+    .json({ email, name, avatarURL, dailyNorma: waterRate, gender });
 };
 
 const changeCurrentInfo = async (req, res) => {
   const { id } = req.user;
 
   const user = await User.findById(id);
-
-  if (!user) {
-    throw HttpError(401, "Not authorized");
-  }
 
   const {
     email = user.email,
@@ -66,6 +60,9 @@ const changeCurrentInfo = async (req, res) => {
     newPassword,
     gender = user.gender,
   } = req.body;
+
+  const emailExists = await User.findOne({ email });
+  if (emailExists) throw HttpError(409, "Email already registered");
 
   const condition = newPassword !== undefined && oldPassword !== undefined;
 

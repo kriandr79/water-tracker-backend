@@ -2,8 +2,10 @@ import Joi from "joi";
 
 const calendarMonthSchema = Joi.object({
   month: Joi.string().required().length(2),
-  year: Joi.string().required().length(4)
+  year: Joi.string().required().length(4),
 });
 
-
-export default calendarMonthSchema;
+const todaySchema = Joi.object({
+  currentDate: Joi.string(),
+});
+export default { calendarMonthSchema, todaySchema };
