@@ -91,8 +91,7 @@ export const currentChangeSchema = Joi.object({
       "string.alphanum": "Please only use numbers and letters for the name.",
       "string.min": "Name must be between 1 and 20 characters long",
       "string.max": "Name must be between 1 and 20 characters long",
-    })
-    .pattern(new RegExp(".*\\S.*")),
+    }),
   gender: Joi.string()
     .alphanum()
     .label("Your gender")
